@@ -1,0 +1,16 @@
+(define (map-and proc lis)
+  (let ((mapped (map proc lis)))
+	(define (and-list lis)
+	  (cond ((null? lis) #t)
+			(else (and (car lis)
+					   (and-list (cdr lis))))))
+	(and-list mapped)))
+
+(define (map-or proc lis)
+  (let ((mapped (map proc lis)))
+	(define (or-list lis)
+	  (cond ((null? lis) #f)
+			(else (or (car lis)
+					  (or-list (cdr lis))))))
+	(or-list mapped)))
+
