@@ -14,13 +14,14 @@
                  (if a b))
                 ((iff a then b els c endif)
                  (if a b c))))
-(define-syntax -->
+(define-syntax ==>
   (syntax-rules (iif)
                 ((fuck a iif b)
                  (if b a))))
 
-(--> 3 iif (> 1 0));;3  实现类似perl的die if ($fucked)的语法
-(define (fuck)
+(==> 3 iif (> 1 0));;3  实现类似perl的die if ($fucked)的语法
+
+(define (fuck);;实现if...then...els..endif语法
   (let ((a 1))
     (iff (> a 0)
          then 
