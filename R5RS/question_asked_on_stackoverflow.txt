@@ -1,0 +1,39 @@
+I am reading the r5rs standard and find that the begin() is actually a library syntax, which means that it could be defined by scheme itself, and the standard gives an implementation at the end of the standard.
+
+I followed the r5rs to implemented begin() using define-syntax like below:
+
+    (define-syntax mybegin
+      (syntax-rules ()
+                    ((mybegin expr) expr)
+                    ((mybegin expr1 expr2 ...)
+                     (let ((x expr1))
+                       (mybegin expr2 ...)))))
+
+and then I tried to implement it using function, here is my code:
+
+    (define begin-func
+      (lambda (expr1 expr2)
+        ((lambda (x) expr2) expr1)))
+
+here is my test case:
+
+    (define x 3)
+    (define y 3)
+    (mybegin
+      (set! x 4)
+      (set! x 5))
+    (begin-func
+      (set! y 4)
+      (set! y 5))
+
+I ran my code in MIT-SCHEME and Racket using #lang scheme
+x is 5 in both MIT-SCHEME and Racket, however, y is 4 in MIT-SCHEME but 5 in Racket
+
+
+So, Here is my question:
+
+1. Is it true that we could really implement begin() using pure
+    functional scheme?
+2. Is there anything wrong in my code, both the code using macro and
+    function?
+3. why does same code behaves differently in MIT-SCHEME and Racket?
