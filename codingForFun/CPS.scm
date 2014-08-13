@@ -1,0 +1,11 @@
+(define (fib n)
+  (define (fib-cps n c)
+    (if (<= n 1)
+        (c 1)
+        (fib-cps (- n 1)
+                 (lambda (r1)
+                   (fib-cps (- n 2)
+                            (lambda (r2)
+                              (c (+ r1 r2))))))))
+  (fib-cps n (lambda (x) x)))
+
