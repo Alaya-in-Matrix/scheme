@@ -1,21 +1,31 @@
-;;test case
-(define (curry f . args))
-(define neg (curry * -1))
-(define square (curry expt nil 2))
-(define my-sqrt (curry expt nil 0.5))
-(define testNum -4)
+(define (curry f)
+  (define (curry-aux f args arity-counter)
+    (cond ((<= arity-counter 1)
+           (lambda (x)
+             (apply f (reverse (cons x args)))))
+          (else
+            (lambda (x)
+              (curry-aux f (cons x args) (- arity-counter 1))))))
+  (let ((arity (procedure-arity f)))
+    (let ((min-arity (procedure-arity-min arity))
+          (max-arity (procedure-arity-max arity)))
+      (if (not (equal? min-arity max-arity)) 
+        (error "errMsg: I don't wan't to handle variable length argument list -- CURRY")
+        (curry-aux f '() (procedure-arity-min (procedure-arity f)))))))
 
+;;simple macro to do auto-currying
+;;just learnt some cases of macro days ago
+;;I don't know whether this is the right way to do so
+(define-syntax curry-def
+  (syntax-rules ()
+                ((curry-def (f x y) expr)
+                            (begin (define (f x y) expr)
+                                   (set! f (curry f))))
+                ((curry-def f expr)
+                 (begin (define f expr)
+                        (set! f (curry f))
+                        f))))
 
-(begin
-  (set! testNum (neg testNum))
-  (display testNum);;4
-  (newline)
-
-  (set! testNum (square testNum))
-  (display testNum);;16
-  (newline)
-
-  (set! testNum (square testNum))
-  (display testNum);;4
-  (newline))
+;; test case
+(curry-def sub (lambda (x y z) (- x y z)))
 
