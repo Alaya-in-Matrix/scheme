@@ -10,7 +10,7 @@
     (let ((min-arity (procedure-arity-min arity))
           (max-arity (procedure-arity-max arity)))
       (if (not (equal? min-arity max-arity)) 
-        (error "errMsg: I don't wan't to handle variable length argument list -- CURRY")
+        (error "errMsg: I don't wan't to handle procedure with variable-length argument list -- CURRY")
         (curry-aux f '() (procedure-arity-min (procedure-arity f)))))))
 
 ;;simple macro to do auto-currying
@@ -27,5 +27,16 @@
                         f))))
 
 ;; test case
-(curry-def sub (lambda (x y z) (- x y z)))
-
+(define (mult a b)  
+        (* a b))
+(curry-def (curry-mult a b) 
+           (* a b))
+(define add 
+        (lambda (x y) (+ x y)))
+(curry-def curry-add
+           (lambda (x y) (+ x y)))
+(mult 3 4) ;;12
+((curry-mult 3) 4);;12
+(add 3 4);;7
+((curry-add 3) 4);;7
+(procedure? (curry-mult 3));;true
