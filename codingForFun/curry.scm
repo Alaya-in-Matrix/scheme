@@ -19,13 +19,12 @@
 (define-syntax curry-def
   (syntax-rules ()
                 ((curry-def (f x y) expr)
-                            (begin (define (f x y) expr)
-                                   (set! f (curry f))))
+                 (define f (curry (lambda (x y) expr))))
                 ((curry-def f expr)
                  (begin (define f expr)
-                        (set! f (curry f))
-                        f))))
-
+                        (if (procedure? f)
+                            (begin (set! f (curry f)) f)
+                            f)))))
 ;; test case
 (define (mult a b)  
         (* a b))
