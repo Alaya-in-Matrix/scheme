@@ -16,8 +16,13 @@
 ;;simple macro to do auto-currying
 ;;just learnt some cases of macro days ago
 ;;I don't know whether this is the right way to do so
+;;maybe someday I can implement curry only using macro?
 (define-syntax curry-def
-  (syntax-rules ()
+  (syntax-rules (curry)
+                ((curry-def (curry x y) expr)
+                 (error "illegal function name -- MACRO curry-def"))
+                ((curry-def curry expr)
+                 (error "illegal var name -- MACRO curry-def"))
                 ((curry-def (f x y) expr)
                  (define f (curry (lambda (x y) expr))))
                 ((curry-def f expr)
