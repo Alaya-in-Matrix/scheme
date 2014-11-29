@@ -32,3 +32,12 @@
 (cdef sub 
       (lambda (x y) (- x y)))
 
+
+;;(define zero (lambda (f) (lambda (x) x)))
+;;(define succ (lambda (n) (lambda (f) (lambda (x) (f ((n f) x))))))
+(cdef (zero s x) x)
+(cdef (succ w y x) (y (w y x)))
+(define (add n1 n2)
+  ((n1 succ) n2))
+(define (++ x) (+ x 1))
+
