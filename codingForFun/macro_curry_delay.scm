@@ -39,5 +39,6 @@
 (cdef (succ w y x) (y (w y x)))
 (define (add n1 n2)
   ((n1 succ) n2))
+(define (mul n1 n2)
+  ((n1 (n2 succ)) zero))
 (define (++ x) (+ x 1))
-
